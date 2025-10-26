@@ -4,7 +4,6 @@ import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = React.useState<User | null>(null);
-    const [loading, setLoading] = React.useState<boolean>(true);
 
     // Simule la récupération d'un token ou d'un user stocké
     useEffect(() => {
@@ -12,7 +11,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
-        setLoading(false);
     }, []);
 
     const login = (userData: User) => {
@@ -20,13 +18,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("auth-user", JSON.stringify(userData));
     };
 
+    const register = (userData: User) => {
+        login(userData);
+        console.log("User registered:", userData);
+    };
+
     const logout = () => {
+        const confirmation = window.confirm(
+            "Are you sure you want to log out?"
+        );
+        if (!confirmation) return;
+
         localStorage.removeItem("auth-user");
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

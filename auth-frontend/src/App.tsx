@@ -1,12 +1,10 @@
-import { Footer, Navbar } from "./components/layouts";
+import { AppRoutes } from "./routes";
 import "./styles/App.css";
 
 function App() {
     return (
         <>
-            <Navbar />
-            <main>Placeholder for main content</main>
-            <Footer />
+            <AppRoutes />
         </>
     );
 }

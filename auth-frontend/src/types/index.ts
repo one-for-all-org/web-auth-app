@@ -17,6 +17,7 @@ export type User = {
     id: string;
     name: string;
     email: string;
+    password: string;
     role?: string;
 };
 
@@ -24,5 +25,6 @@ export type AuthContextType = {
     user: User | null;
     login: (userData: User) => void;
     logout: () => void;
+    register: (userData: User) => void;
     role?: string;
 };
