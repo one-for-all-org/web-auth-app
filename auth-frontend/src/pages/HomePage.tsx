@@ -7,12 +7,13 @@ export const HomePage = () => {
         navigate("/register");
     };
     return (
-        <div>
-            <h1>Home Page</h1>
-            <p>Welcome to the home page!</p>
-            <Button variant="outline" size="sm" onClick={navigateToLogin}>
-                Get started
-            </Button>
+        <div className="w-full h-screen flex justify-center items-center px-2">
+            <div className="flex flex-col gap-2">
+                <p>Welcome to the home page!</p>
+                <Button variant="outline" size="sm" onClick={navigateToLogin}>
+                    Get started
+                </Button>
+            </div>
         </div>
     );
 };

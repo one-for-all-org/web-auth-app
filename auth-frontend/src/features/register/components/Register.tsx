@@ -1,8 +1,9 @@
-import { Button, Field, Fieldset, Input, Stack } from "@chakra-ui/react";
+import { Button, Field, Fieldset, Input, Link, Stack } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { v4 as uuidv4 } from "uuid";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const Register = () => {
     const { register } = useAuth();
@@ -28,7 +29,12 @@ const Register = () => {
     return (
         <Fieldset.Root size="lg" maxW="md">
             <Stack>
-                <Fieldset.Legend>Register</Fieldset.Legend>
+                <Fieldset.Legend className="flex items-center gap-2">
+                    <Link href="/" color="gray">
+                        <FaArrowLeftLong />
+                    </Link>
+                    <span>Register</span>
+                </Fieldset.Legend>
                 <Fieldset.HelperText>
                     Please provide your info details below.
                 </Fieldset.HelperText>
@@ -69,6 +75,12 @@ const Register = () => {
                     Submit
                 </Button>
             </form>
+            <p className="flex gap-2">
+                <span>Already have account</span>
+                <Link href="/login" color="blue.400">
+                    login'
+                </Link>
+            </p>
         </Fieldset.Root>
     );
 };
