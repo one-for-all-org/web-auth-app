@@ -1,12 +1,12 @@
 import { Button, Field, Fieldset, Input, Link, Stack } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useState } from "react";
-import { useAuth } from "../../../hooks/useAuth";
 import { v4 as uuidv4 } from "uuid";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { registerUser } from "../service/registerService";
+import AlertMessage from "../../../components/commons/AlertMessage";
 
 const Register = () => {
-    const { register } = useAuth();
     const id = uuidv4();
     const [form, setForm] = useState({
         id: id,
@@ -15,15 +15,28 @@ const Register = () => {
         role: "user",
     });
     const [password, setPassword] = useState("");
+    const [isRegister, setisRegister] = useState(false);
+    const [error, setError] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        register({ ...form, password });
+        try {
+            await registerUser({ ...form, password });
+            setisRegister(true);
+            setTimeout(() => {
+                setisRegister(false);
+            }, 3000);
+        } catch (error) {
+            setError(true);
+            setTimeout(() => {
+                setError(false);
+            }, 3000);
+            console.log("error during saving user", error);
+        }
     };
 
     return (
@@ -47,6 +60,7 @@ const Register = () => {
                             name="name"
                             value={form.name}
                             onChange={handleChange}
+                            placeholder="Your name"
                             required
                         />
                     </Field.Root>
@@ -58,6 +72,7 @@ const Register = () => {
                             type="email"
                             value={form.email}
                             onChange={handleChange}
+                            placeholder="Your email"
                             required
                         />
                     </Field.Root>
@@ -67,6 +82,7 @@ const Register = () => {
                         <PasswordInput
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            placeholder="********"
                             required
                         />
                     </Field.Root>
@@ -81,6 +97,20 @@ const Register = () => {
                     login'
                 </Link>
             </p>
+            <div className="w-full my-2">
+                {isRegister && (
+                    <AlertMessage
+                        status="success"
+                        message="User save successfuly !"
+                    />
+                )}
+                {error && (
+                    <AlertMessage
+                        status="error"
+                        message="error trying to save user!"
+                    />
+                )}
+            </div>
         </Fieldset.Root>
     );
 };

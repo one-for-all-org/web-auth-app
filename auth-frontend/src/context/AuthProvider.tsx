@@ -18,11 +18,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("auth-user", JSON.stringify(userData));
     };
 
-    const register = (userData: User) => {
-        login(userData);
-        console.log("User registered:", userData);
-    };
-
     const logout = () => {
         const confirmation = window.confirm(
             "Are you sure you want to log out?"
@@ -34,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout }}>
+        <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

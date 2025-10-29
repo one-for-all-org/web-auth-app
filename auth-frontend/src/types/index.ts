@@ -25,6 +25,9 @@ export type AuthContextType = {
     user: User | null;
     login: (userData: User) => void;
     logout: () => void;
-    register: (userData: User) => void;
     role?: string;
 };
+export interface AlertType {
+    status: "info" | "warning" | "success" | "error" | "neutral" | undefined;
+    message: string;
+}
