@@ -2,6 +2,7 @@ import express from "express";
 import {
     createUser,
     getAllUser,
+    getAythUser,
     getUserById,
 } from "../controllers/user.controller.js";
 
@@ -10,5 +11,6 @@ const route = express.Router();
 route.post("/user", createUser);
 route.get("/user", getAllUser);
 route.get("/user/:id", getUserById);
+route.post("/user/auth", getAythUser);
 
 export default route;

@@ -56,4 +56,24 @@ const getUserById = async (req, res) => {
     }
 };
 
-export { createUser, getAllUser, getUserById };
+const getAythUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ where: { email, password } });
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                message: "incorrect email or password",
+            });
+        }
+        const message = "authentification successful !";
+        res.status(200).json(success(message, user));
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: `internal server error : ${error}`,
+        });
+    }
+};
+
+export { createUser, getAllUser, getUserById, getAythUser };

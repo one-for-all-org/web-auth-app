@@ -1,14 +1,16 @@
-import { Button, Field, Fieldset, Input, Link, Stack } from "@chakra-ui/react";
+import { Field, Fieldset, Input, Link, Stack } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { registerUser } from "../service/registerService";
 import AlertMessage from "../../../components/commons/AlertMessage";
+import type { User } from "../../../types";
+import ButtonForm from "../../../components/commons/ButtonForm";
 
 const Register = () => {
     const id = uuidv4();
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<User>({
         id: id,
         name: "",
         email: "",
@@ -22,6 +24,14 @@ const Register = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const resetForm = () => {
+        setForm({
+            name: "",
+            email: "",
+        });
+        setPassword("");
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -30,6 +40,7 @@ const Register = () => {
             setTimeout(() => {
                 setisRegister(false);
             }, 3000);
+            resetForm();
         } catch (error) {
             setError(true);
             setTimeout(() => {
@@ -87,9 +98,7 @@ const Register = () => {
                         />
                     </Field.Root>
                 </Fieldset.Content>
-                <Button type="submit" alignSelf="flex-start" mt={4}>
-                    Submit
-                </Button>
+                <ButtonForm resetForm={resetForm} />
             </form>
             <p className="flex gap-2">
                 <span>Already have account</span>
