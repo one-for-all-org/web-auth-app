@@ -7,6 +7,11 @@ import ButtonForm from "../../../components/commons/ButtonForm";
 import { useState } from "react";
 import AlertMessage from "../../../components/commons/AlertMessage";
 import { useAuth } from "../../../hooks/useAuth";
+import type { AxiosError } from "axios";
+
+interface ErrorResponse {
+    message?: string;
+}
 
 const Login = () => {
     const { login } = useAuth();
@@ -19,20 +24,24 @@ const Login = () => {
 
     const [isAuthentified, setIsAuthentified] = useState(false);
     const [error, setError] = useState(false);
+    const [message, setMessage] = useState("");
 
-    const onSubmit = handleSubmit((data) => {
+    const onSubmit = handleSubmit(async (data) => {
         try {
-            login(data);
+            await login(data);
             setIsAuthentified(true);
-            setTimeout(() => {
-                setIsAuthentified(false);
-            }, 3000);
-        } catch (error) {
-            console.log(error);
+            setMessage("Authentification successfuly!");
+            setTimeout(() => setIsAuthentified(false), 3000);
+            resetForm();
+        } catch (err) {
+            const error = err as AxiosError<ErrorResponse>;
             setError(true);
-            setTimeout(() => {
-                setError(false);
-            }, 3000);
+            setMessage(error.response?.data?.message ?? "error");
+            setTimeout(() => setError(false), 3000);
+            console.log(
+                "Login failed:",
+                error.response?.data?.message ?? "error"
+            );
         }
     });
 
@@ -80,17 +89,9 @@ const Login = () => {
             </form>
             <div className="w-full my-2">
                 {isAuthentified && (
-                    <AlertMessage
-                        status="success"
-                        message="Authentification successfuly !"
-                    />
+                    <AlertMessage status="success" message={message} />
                 )}
-                {error && (
-                    <AlertMessage
-                        status="error"
-                        message="wrong Email or password, try egain !"
-                    />
-                )}
+                {error && <AlertMessage status="error" message={message} />}
             </div>
             <p className="flex gap-2">
                 <span>Don't have account</span>

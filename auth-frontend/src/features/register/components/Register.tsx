@@ -7,6 +7,7 @@ import { registerUser } from "../service/registerService";
 import AlertMessage from "../../../components/commons/AlertMessage";
 import type { User } from "../../../types";
 import ButtonForm from "../../../components/commons/ButtonForm";
+import type { AxiosError } from "axios";
 
 const Register = () => {
     const id = uuidv4();
@@ -17,8 +18,9 @@ const Register = () => {
         role: "user",
     });
     const [password, setPassword] = useState("");
-    const [isRegister, setisRegister] = useState(false);
-    const [error, setError] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
+    const [errorSave, setErrorSave] = useState(false);
+    const [message, setMessage] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,17 +38,28 @@ const Register = () => {
         e.preventDefault();
         try {
             await registerUser({ ...form, password });
-            setisRegister(true);
+            setIsRegister(true);
+            setMessage("User save successful!");
             setTimeout(() => {
-                setisRegister(false);
+                setIsRegister(false);
             }, 3000);
             resetForm();
-        } catch (error) {
-            setError(true);
-            setTimeout(() => {
-                setError(false);
-            }, 3000);
-            console.log("error during saving user", error);
+        } catch (err) {
+            const error = err as AxiosError;
+            if (error.response) {
+                if (error.response.status === 409) {
+                    setErrorSave(true);
+                    setMessage("Email already used!");
+                    setTimeout(() => {
+                        setErrorSave(false);
+                    }, 3000);
+                } else {
+                    setMessage("unknoun error!");
+                }
+            } else {
+                setErrorSave(true);
+                setMessage("Server error!");
+            }
         }
     };
 
@@ -108,17 +121,9 @@ const Register = () => {
             </p>
             <div className="w-full my-2">
                 {isRegister && (
-                    <AlertMessage
-                        status="success"
-                        message="User save successfuly !"
-                    />
+                    <AlertMessage status="success" message={message} />
                 )}
-                {error && (
-                    <AlertMessage
-                        status="error"
-                        message="error trying to save user!"
-                    />
-                )}
+                {errorSave && <AlertMessage status="error" message={message} />}
             </div>
         </Fieldset.Root>
     );

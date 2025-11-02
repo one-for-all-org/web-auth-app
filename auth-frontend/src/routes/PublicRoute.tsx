@@ -8,7 +8,7 @@ export const PublicRoute = () => {
      * if authenticated, redirect to home page
      */
     if (user) {
-        return <Navigate to="/dashboard/profile" replace />;
+        return <Navigate to="/profile" replace />;
     }
 
     /**

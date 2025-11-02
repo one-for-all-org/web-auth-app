@@ -1,9 +1,19 @@
 import success from "../helper/success.js";
 import { User } from "../models/index.js";
+import checkEmail from "../utils/checkEmail.js";
 
 const createUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
+
+        const emailExist = await checkEmail(email);
+        if (emailExist) {
+            return res.status(409).json({
+                success: false,
+                message: "Email already exist",
+            });
+        }
+
         const newUser = await User.create({
             name,
             email,

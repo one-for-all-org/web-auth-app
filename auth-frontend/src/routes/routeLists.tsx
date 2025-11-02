@@ -1,7 +1,7 @@
 import {
-    DashboardPage,
     HomePage,
     LoginPage,
+    ProfilePage,
     RegisterPage,
 } from "../pages";
 import { NotFoundPage } from "../pages/NoteFoundPage";
@@ -14,5 +14,5 @@ export const publicRoutesListes = [
 ];
 
 export const protectedRoutesListes = [
-    { path: "/dashboard", element: <DashboardPage /> },
+    { path: "/profile", element: <ProfilePage /> },
 ];

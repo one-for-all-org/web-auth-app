@@ -25,8 +25,10 @@ User.init(
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: emailRegex,
             unique: true,
+            validate: {
+                is: emailRegex,
+            },
         },
         password: {
             type: DataTypes.STRING,

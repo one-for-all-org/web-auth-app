@@ -1,5 +1,5 @@
 import { sequelize } from "../config/connectionDB.js";
-import User from "./user.model.js";
+export { default as User } from "./user.model.js";
 
 const synchroniseModels = async () => {
     try {
@@ -10,4 +10,4 @@ const synchroniseModels = async () => {
     }
 };
 
-export { User, synchroniseModels };
+export { synchroniseModels };

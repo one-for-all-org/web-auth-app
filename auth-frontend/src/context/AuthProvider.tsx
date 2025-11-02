@@ -19,16 +19,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Make login a void-returning function by running async work inside an IIFE,
     // and stabilize the function reference with useCallback.
     const login = useCallback(
-        (userData: User) => {
-            (async () => {
-                try {
-                    setUser(userData);
-                    await api.post("/user/auth", userData);
-                    console.log(`Authentification success`);
-                } catch (error) {
-                    console.log("Authentification failed !", error);
-                }
-            })();
+        async (userData: User) => {
+            try {
+                const response = await api.post("/user/auth", userData);
+
+                setUser(response.data.data);
+                localStorage.setItem(
+                    "auth-user",
+                    JSON.stringify(response.data.data)
+                );
+
+                navigate("/profile");
+                console.log(
+                    `Authentification success! , data : ${JSON.stringify(
+                        response.data.data
+                    )}`
+                );
+                return response.data.data;
+            } catch (error) {
+                console.log("Authentification failed !", error);
+                throw error;
+            }
         },
         [setUser, navigate]
     );
@@ -40,6 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         );
         if (!confirmation) return;
         setUser(null);
+        localStorage.removeItem("auth-user");
     }, [setUser]);
 
     // Memoize the provider value so it doesn't change each render.
