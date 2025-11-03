@@ -66,24 +66,57 @@ const getUserById = async (req, res) => {
     }
 };
 
-const getAythUser = async (req, res) => {
+const getAuthUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ where: { email, password } });
+        const user = await User.findOne({ where: { email } });
         if (!user) {
             res.status(404).json({
                 success: false,
                 message: "incorrect email or password",
             });
         }
+        const isValid = validatPassword(password);
+        if (!isValid) {
+            res.status(404).json({
+                success: false,
+                message: "incorrect email or password",
+            });
+        }
+
         const message = "authentification successful !";
         res.status(200).json(success(message, user));
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: `internal server error : ${error}`,
+            message: `internal server error!`,
+            error: error.message,
         });
     }
 };
 
-export { createUser, getAllUser, getUserById, getAythUser };
+const deleteUserById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findOne({ where: { id } });
+        if (!user) {
+            res.status(409).json({
+                success: false,
+                message: "user not found !",
+            });
+        }
+        user.destroy({ where: { id } });
+        res.status(200).json({
+            success: true,
+            message: "user deleted successful!",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error,
+        });
+    }
+};
+
+export { createUser, getAllUser, getUserById, getAuthUser, deleteUserById };

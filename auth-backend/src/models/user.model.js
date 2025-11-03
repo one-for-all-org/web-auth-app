@@ -1,5 +1,6 @@
 import { DataTypes, Model, UUIDV4 } from "sequelize";
 import { sequelize } from "../config/connectionDB.js";
+import bcrypt from "bcrypt";
 
 class User extends Model {
     otherPublicField;
@@ -41,5 +42,33 @@ User.init(
     },
     { sequelize, modelName: "User", tableName: "users", timestamps: true }
 );
+/**
+ * intercepte les data avant le POST
+ */
+User.beforeCreate(async (user) => {
+    if (user.password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+    }
+});
+
+/**
+ * Intercepte les data avant le PUT
+ */
+User.beforeUpdate(async (user) => {
+    if (user.changed("password")) {
+        const salt = await brypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+    }
+});
+
+/**
+ * Comparaison methodes
+ * @param {*} password
+ * @returns
+ */
+User.prototype.validatPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
 
 export default User;
