@@ -13,6 +13,6 @@ route.post("/user", createUser);
 route.get("/user", getAllUser);
 route.get("/user/:id", getUserById);
 route.post("/user/auth", getAuthUser);
-route.delete("/user/:id", deleteUserById);
+route.delete("/user/delete/:id", deleteUserById);
 
 export default route;

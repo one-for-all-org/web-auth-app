@@ -76,7 +76,7 @@ const getAuthUser = async (req, res) => {
                 message: "incorrect email or password",
             });
         }
-        const isValid = validatPassword(password);
+        const isValid = await user.validatPassword(password);
         if (!isValid) {
             res.status(404).json({
                 success: false,
