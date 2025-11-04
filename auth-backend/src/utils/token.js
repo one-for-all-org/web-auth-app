@@ -4,7 +4,7 @@ import {
     ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN_EXPIRES_IN,
     REFRESH_TOKEN_SECRET,
-} from "../config/jwt";
+} from "../config/jwt.js";
 
 /**
  * Génère un token d’accès à courte durée (ex: 30min)

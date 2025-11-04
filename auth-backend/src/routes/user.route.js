@@ -3,16 +3,14 @@ import {
     createUser,
     deleteUserById,
     getAllUser,
-    getAuthUser,
     getUserById,
 } from "../controllers/user.controller.js";
 
-const route = express.Router();
+const router = express.Router();
 
-route.post("/user", createUser);
-route.get("/user", getAllUser);
-route.get("/user/:id", getUserById);
-route.post("/user/auth", getAuthUser);
-route.delete("/user/delete/:id", deleteUserById);
+router.post("/user", createUser);
+router.get("/user", getAllUser);
+router.get("/user/:id", getUserById);
+router.delete("/user/delete/:id", deleteUserById);
 
-export default route;
+export default router;
